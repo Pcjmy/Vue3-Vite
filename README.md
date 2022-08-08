@@ -27,6 +27,9 @@ Done. Now run:
 
 PS E:\Web\lighting\vue> npm install vue-router -S
 added 2 packages in 2s
+
+PS E:\Web\lighting\vue> npm i axios -S
+added 8 packages in 2s
 ```
 
 ### Element plus
