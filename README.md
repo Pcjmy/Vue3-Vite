@@ -39,5 +39,16 @@ added 8 packages in 2s
 > npm install @element-plus/icons-vue
 ```
 
+### 数据库
 
+数据库名称 lighting
 
+基字符集 utf8mb4
+
+数据库排序规则 utf8mb4_unicode_ci
+
+```sql
+>source lighting.sql
+```
+
+ 

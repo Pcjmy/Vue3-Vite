@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bytedance.dao.UserDao">
+    <insert id="insert">
+        INSERT INTO `user`(username, password) values(#{username},  #{password})
+    </insert>
+
+    <update id="update">
+        update `user` set username = #{username}, password = #{password} where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE from `user` where id = #{id}
+    </delete>
+
+    <select id="findAll" resultType="com.bytedance.entity.User">
+        SELECT * FROM user
+    </select>
+
+    <select id="getById" resultType="com.bytedance.entity.User">
+        SELECT * FROM user where id = #{id}
+    </select>
+
+    <select id="getByUser" resultType="com.bytedance.entity.User">
+        SELECT * FROM user where username = #{username} and password = #{password}
+    </select>
+
+</mapper>

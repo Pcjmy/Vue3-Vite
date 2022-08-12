@@ -1,4 +1,4 @@
-package com.bytedance.demo;
+package com.bytedance;
 
 import com.bytedance.entity.User;
 import org.springframework.boot.SpringApplication;
@@ -17,11 +17,10 @@ public class SpringbootApplication {
         SpringApplication.run(SpringbootApplication.class, args);
     }
 
-    @GetMapping("/{msg}")  // localhost:9090/{msg}   //  localhost:9090/Pcjmy
-    public User hello(@PathVariable String msg) {
-        User user = new User();
-        user.setUsername(msg);
-        return user;
-    }
-
+//    @GetMapping("/{msg}")  // localhost:9090/{msg}   //  localhost:9090/Pcjmy
+//    public User hello(@PathVariable String msg) {
+//        User user = new User();
+//        user.setUsername(msg);
+//        return user;
+//    }
 }
