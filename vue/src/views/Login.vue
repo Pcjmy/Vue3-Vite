@@ -18,10 +18,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance } from 'vue'
-import { User, Lock } from '@element-plus/icons-vue'
-import { ElMessage, ElNotification } from "element-plus";
+import {ref, reactive, getCurrentInstance} from 'vue'
+import {User, Lock} from '@element-plus/icons-vue'
+import {ElMessage, ElNotification } from "element-plus";
 import request from "../request";
+import router from "../router";
 const { proxy } = getCurrentInstance()
 
 const rules = reactive({
@@ -33,12 +34,7 @@ const rules = reactive({
   ],
 })
 
-const user = reactive({
-  name: 'Pcjmy'
-})
-const changeUser = (name) => {
-  user.name = name   // 通过这种方式来赋值
-}
+const user = reactive({})
 
 const login = () => {
   proxy.$refs.ruleFormRef.validate((valid) => {
@@ -46,16 +42,17 @@ const login = () => {
       // Promise
       // 往后台发请求 http://localhost:9090    /user/login
       // 后台数据格式：{"code": "200", "msg": "", "data": null}
-      request.post('/user/login').then(res => {
-        if (res.code === '200') { // 请求成功
+      request.post('/user/login', user).then(res => {
+        if (res) { // 请求成功
           ElNotification({
             type: 'success',
-            message: '用户名或密码错误'
+            message: '登录成功'
           })
+          router.push('/')
         } else {  // 请求失败
           ElNotification({
             type: 'error',
-            message: res.msg
+            message: '登录失败'
           })
         }
       })

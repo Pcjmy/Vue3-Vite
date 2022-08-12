@@ -15,6 +15,19 @@ public class UserController {
     @Autowired
     private UserDao userDao;
 
+    //    @PostMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody User user) {  // @RequestBody接受一个json参数
+        if (user.getUsername() == null || user.getPassword() == null) {
+            throw new RuntimeException("参数错误");
+        }
+        User result = userDao.getByUser(user.getUsername(), user.getPassword());
+        if (result == null) {
+            throw new RuntimeException("用户名或密码错误");
+        }
+        return result;
+    }
+
     @GetMapping   // localhost:9090/  //  localhost:9090/Pcjmy
     public List<User> findAll() {
         return userDao.findAll();

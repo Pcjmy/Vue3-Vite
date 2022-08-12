@@ -1,17 +1,19 @@
 <template>
-  <div>
-    主页
-    <br/>
-    <el-button type="primary">
-      Hello
-      <el-icon><Edit /></el-icon>
-
-      <Edit style="width: 1em; height: 1em; margin-right: 8px" />
-      <Position style="width: 1em; height: 1em; margin-right: 8px" />
-    </el-button>
-  </div>
+  <el-table :data="state.tableData" stripe style="width: 360px">
+    <el-table-column prop="id" align="center" label="ID" width="180"/>
+    <el-table-column prop="username" align="center" label="用户名" />
+  </el-table>
 </template>
 
 <script setup>
 import {Edit, Position} from '@element-plus/icons-vue'
+import {reactive} from "vue";
+import request from "../request";
+
+const state = reactive({
+  tableDate: []
+})
+request.get("/user").then(res => {
+  state.tableData = res
+})
 </script>
