@@ -1,11 +1,10 @@
 package com.bytedance.controller;
 
+import com.bytedance.common.Result;
 import com.bytedance.dao.UserDao;
 import com.bytedance.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
@@ -17,54 +16,53 @@ public class UserController {
 
     //    @PostMapping("/login")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public User login(@RequestBody User user) {  // @RequestBody接受一个json参数
+    public Result login(@RequestBody User user) {  // @RequestBody接受一个json参数
         if (user.getUsername() == null || user.getPassword() == null) {
-            throw new RuntimeException("参数错误");
+            return Result.error("参数错误");
         }
         User result = userDao.getByUser(user.getUsername(), user.getPassword());
         if (result == null) {
-            throw new RuntimeException("用户名或密码错误");
+            return Result.error("用户名或密码错误");
         }
-        return result;
+        return Result.success(result);
     }
 
     @GetMapping   // localhost:9090/  //  localhost:9090/Pcjmy
-    public List<User> findAll() {
-        return userDao.findAll();
+    public Result findAll() {
+        return Result.success(userDao.findAll());
     }
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable Integer id) {
-        return userDao.getById(id);
+    public Result findById(@PathVariable Integer id) {
+        return Result.success(userDao.getById(id));
     }
 
     @GetMapping("/uniqueQuery")
-    public User uniqueQuery(String username, String password) {
-        return userDao.getByUser(username, password);
+    public Result uniqueQuery(String username, String password) {
+        return Result.success(userDao.getByUser(username, password));
     }
 
     @PostMapping
-    public void save(@RequestBody User user) {
+    public Result save(@RequestBody User user) {
         if (user.getUsername() == null || user.getPassword() == null) {
-            throw new RuntimeException("参数错误");
+            return Result.error("参数错误");
         }
-        userDao.insert(user);
+        return Result.success(userDao.insert(user));  // 返回数据库操作的记录数，大于0的时候，则表示操作成功，反之无操作
     }
 
     @PutMapping
-    public void update(@RequestBody User user) {
+    public Result update(@RequestBody User user) {
         if (user.getId() == null) {
-            throw new RuntimeException("参数错误");
+            return Result.error("参数错误");
         }
-        userDao.update(user);
+        return Result.success(userDao.update(user));
     }
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Integer id) {
+    public Result delete(@PathVariable Integer id) {
         if (id == null || id == 0) {
-            throw new RuntimeException("参数错误");
+            return Result.error("参数错误");
         }
-        return userDao.deleteById(id) == 1;
+        return Result.success(userDao.deleteById(id) == 1);
     }
-
 }

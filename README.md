@@ -48,6 +48,9 @@ added 8 packages in 2s
 数据库排序规则 utf8mb4_unicode_ci
 
 ```sql
+-- 数据库备份
+>mysqldump -hlocalhost -uroot -p123456 lighting > lighting.sql
+-- 数据库恢复
 >source lighting.sql
 ```
 

@@ -43,7 +43,8 @@ const login = () => {
       // 往后台发请求 http://localhost:9090    /user/login
       // 后台数据格式：{"code": "200", "msg": "", "data": null}
       request.post('/user/login', user).then(res => {
-        if (res) { // 请求成功
+        console.log(res);
+        if (res.code === '200') { // 请求成功
           ElNotification({
             type: 'success',
             message: '登录成功'
@@ -52,7 +53,7 @@ const login = () => {
         } else {  // 请求失败
           ElNotification({
             type: 'error',
-            message: '登录失败'
+            message: res.msg
           })
         }
       })
