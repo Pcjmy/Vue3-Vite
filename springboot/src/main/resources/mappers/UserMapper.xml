@@ -52,4 +52,50 @@
         SELECT * FROM user where username = #{username} and password = #{password}
     </select>
 
+    <select id="findPage" resultType="com.bytedance.entity.User">
+        SELECT * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+        </where>
+        LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT count(id) from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findByOptions" resultType="com.bytedance.entity.User">
+        SELECT * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

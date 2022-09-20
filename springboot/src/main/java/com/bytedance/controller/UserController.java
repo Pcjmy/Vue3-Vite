@@ -1,11 +1,17 @@
 package com.bytedance.controller;
 
 import com.bytedance.common.Result;
+import com.bytedance.controller.DTO.UserQueryDTO;
 import com.bytedance.dao.UserDao;
 import com.bytedance.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import java.util.List;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -30,6 +36,32 @@ public class UserController {
     @GetMapping   // localhost:9090/  //  localhost:9090/Pcjmy
     public Result findAll() {
         return Result.success(userDao.findAll());
+    }
+
+    @GetMapping("/page")  //   /user/page?currentPage=1&pageSize=10
+    public Result findPage(UserQueryDTO userQueryDTO) {
+        // currentPage = 1  pageNum = 0
+        // currentPage = 2  pageNum = 3
+        // currentPage = 3  pageNum = 6
+        Integer currentPage = userQueryDTO.getCurrentPage();
+        Integer pageSize = userQueryDTO.getPageSize();
+        if (currentPage == null || currentPage <= 0 || pageSize == null || pageSize < 1) {
+            return Result.error("参数错误");
+        }
+//        Integer pageNum = (currentPage - 1) * pageSize;
+//        userQueryDTO.setPageNum(pageNum);
+
+//        List<User> users = userDao.findPage(userQueryDTO);
+//        long total = userDao.count(userQueryDTO);
+
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("data", users);
+//        map.put("total", total);
+
+        // 使用 pageHelper
+        PageHelper.startPage(currentPage, pageSize);
+        List<User> users = userDao.findByOptions(userQueryDTO);
+        return Result.success(new PageInfo<>(users));
     }
 
     @GetMapping("/{id}")

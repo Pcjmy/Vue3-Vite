@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div style="margin-bottom: 20px">
+    <el-input style="width: 260px; margin-right: 10px" v-model="username" placeholder="请输入用户名" clearable></el-input>
+    <el-input style="width: 260px; margin-right: 10px" v-model="phone" placeholder="请输入手机号" clearable></el-input>
+    <el-input style="width: 260px; margin-right: 10px" v-model="email" placeholder="请输入邮箱" clearable></el-input>
+    <el-button type="primary" @click="load"><el-icon style="margin-right: 3px"><Search /></el-icon> 查询</el-button>
     <el-button type="primary" @click="handleAdd"><el-icon style="margin-right: 3px"><Plus /></el-icon>新增</el-button>
   </div>
   <el-table :data="state.tableData" stripe style="width: 100%">
@@ -22,6 +26,21 @@
       </template>
     </el-table-column>
   </el-table>
+
+  <div style="margin: 10px 0">
+    <el-pagination
+        :background="true"
+        v-model:currentPage="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[1, 5, 10, 20]"
+        large
+        :disabled="false"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+    />
+  </div>
 
   <el-dialog v-model="dialogFormVisible" title="用户信息" width="40%">
     <el-form :model="state.form" :rules="state.rules" ref="ruleFormRef" label-width="120px" style="width: 85%">
@@ -57,7 +76,7 @@
 </template>
 
 <script setup>
-import {Edit, Delete, Plus} from '@element-plus/icons-vue'
+import {Edit, Delete, Plus, Search} from '@element-plus/icons-vue'
 import {getCurrentInstance, reactive, ref} from "vue";
 import request from "../request";
 import {ElMessage} from "element-plus";
@@ -91,14 +110,41 @@ const state = reactive({
   }
 })
 
+const currentPage = ref(1)
+const pageSize = ref(1)
+const total = ref(1)
+const username = ref('')
+const phone = ref('')
+const email = ref('')
 const load = () => {
-  request.get("/user").then(res => {
+  request.get("/user/page", {
+    params: {
+      currentPage: currentPage.value,
+      pageSize: pageSize.value,
+      username: username.value,
+      phone: phone.value,
+      email: email.value
+    }
+  }).then(res => {
     if (res.code === '200') {
-      state.tableData = res.data
+      state.tableData = res.data.list
+      total.value = res.data.total
     }
   })
 }
 load()
+
+const handleSizeChange = (val) => {
+  console.log(val)
+  pageSize.value = val
+  load()
+}
+
+const handleCurrentChange = (val) => {
+  console.log(val)
+  currentPage.value = val
+  load()
+}
 
 const dialogFormVisible = ref(false)
 const handleAdd = () => {
